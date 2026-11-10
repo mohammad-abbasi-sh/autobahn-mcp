@@ -16,6 +16,7 @@ UA = (
 )
 TIMEOUT = 25.0
 PROBE_URL = "https://verkehr.autobahn.de/o/autobahn/A1/services/roadworks"
+SOURCE = "verkehr.autobahn.de"
 
 
 class AutobahnMcpError(RuntimeError):
@@ -67,14 +68,14 @@ def fetch_text(url: str) -> str:
     assert r is not None  # loop always assigns r or raises
     if r.status_code == 403:
         raise AutobahnMcpError(
-            f"{spec['source']} returned HTTP 403 for {url} (bot wall) — try again later"
+            f"{SOURCE} returned HTTP 403 for {url} (bot wall) — try again later"
         )
     if r.status_code == 429:
         raise AutobahnMcpError(
-            f"{spec['source']} rate-limited the request (HTTP 429) — try again later"
+            f"{SOURCE} rate-limited the request (HTTP 429) — try again later"
         )
     if r.status_code != 200:
-        raise AutobahnMcpError(f"{spec['source']} returned HTTP {r.status_code} for {url}")
+        raise AutobahnMcpError(f"{SOURCE} returned HTTP {r.status_code} for {url}")
     return r.text
 
 
